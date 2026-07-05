@@ -1,0 +1,13 @@
+documentation chip:
+http://galileo2.informatik.uni-wuerzburg.de/wiki/index.php/SKITH
+http://galileo2.informatik.uni-wuerzburg.de/wiki/index.php/SKITH-Mainboard-STM32F4_Ver.2
+
+Proposed Hardware:
+https://voltaicsystems.com/1-watt-6-volt-solar-panel-etfe/
+https://ydlbattery.com/products/3-7v-4000mah-606090-lithium-polymer-ion-battery-1
+https://www.adafruit.com/product/390
+
+Datasheets hardware:
+https://voltaicsystems.com/content/P124_ds.pdf
+https://www.honcell.com/Public/Uploads/uploadfile/files/20240628/DATASHEETHCP6060903.7V4000mAhCELL2024.pdf
+https://cdn-shop.adafruit.com/datasheets/MCP73871.pdf

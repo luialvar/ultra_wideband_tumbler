@@ -1,0 +1,30 @@
+<launch>
+	<!-- Arguments -->
+	<arg name="useRviz" default="false" />
+	<arg name="useSickLMS" default="false" />
+
+	<!-- Load the configuration file -->
+	<rosparam command="load" file="$(find volksbot)/launch/config/parameters.yaml" /> 
+
+	<!-- Load calibration components -->
+	<include file="$(find volksbot)/launch/parts/localcalibration.launch" />
+
+	<!-- Essential volksbot stuff -->
+	<node pkg="volksbot" name="volksbot" type="volksbot" />
+	<node pkg="volksbot" name="odometry" type="odometry" args="1"/>
+
+	<!-- Sick-Laser Scanner -->
+	<group if="$(arg useSickLMS)">
+		<node pkg="lms100" name="sick_front" type="sicksensor" />
+	</group>
+
+	<!-- rviz -->
+	<group if="$(arg useRviz)">
+		<node name="rviz" pkg="rviz" type="rviz" output="screen">
+			<param name="display-config" value="$(find uwb)/uwb.rviz" />
+		</node>
+	</group>
+
+	<!-- Joystick Launch -->
+	<node pkg="volksbot" name="joystick_control" type="jscontrol"/>
+</launch>

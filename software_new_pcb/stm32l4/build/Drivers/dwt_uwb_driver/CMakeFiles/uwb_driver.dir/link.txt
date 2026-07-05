@@ -1,0 +1,2 @@
+/usr/bin/arm-none-eabi-ar qc libuwb_driver.a CMakeFiles/uwb_driver.dir/deca_interface.c.obj CMakeFiles/uwb_driver.dir/deca_compat.c.obj CMakeFiles/uwb_driver.dir/deca_rsl.c.obj
+/usr/bin/arm-none-eabi-ranlib libuwb_driver.a
