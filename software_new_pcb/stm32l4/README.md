@@ -2,6 +2,12 @@
 
 This is the STM32CubeMX/CMake firmware project for the new STM32L431-based UWB PCB. It is the active software target for the migration from the old SKITH/DWM1000 platform to the new DWM3000-based board.
 
+<p align="center">
+  <img src="docs/images/dwm3000_stm32_bringup.png" alt="DWM3000 and STM32L4 bring-up wiring on the bench" width="420">
+</p>
+
+<p align="center"><em>Bench wiring used while checking the DWM3000/STM32L4 bring-up path.</em></p>
+
 ## Migration Context
 
 | Layer | Legacy stack | New stack in this folder |
@@ -66,6 +72,16 @@ The local project glue is mainly in:
 - `Core/Inc/main.h`
 - `Core/Src/main.c`
 
+## Current Bench and Debug Evidence
+
+A recent GDB/OpenOCD debug capture shows the current firmware state:
+
+- `build/stm32l4.elf` can be loaded in GDB and attached through `target extended-remote localhost:3333`, so the host debugger path is usable.
+- Execution reaches `main()` and the current test loop in `Core/Src/main.c`.
+- The firmware then spends time in the large `HAL_Delay(100000000000)` placeholder; this is bring-up scaffolding, not final runtime scheduling.
+- A breakpoint reaches `send_msg_polling()` in `Communication/communication.c` with the test payload before `dwt_writetxdata(...)`, so the active firmware test surface is still raw DW3xxx frame transmission.
+- Before treating TX/RX as validated, the communication helpers still need cleanup: `send_msg_polling()` should receive an explicit payload length instead of using `sizeof(msg)` on a pointer, and the receive path should clear the caller-provided buffer rather than the local pointer variable.
+
 ## Build
 
 ```shell
@@ -115,8 +131,9 @@ The recommended order is:
 1. Confirm the CubeMX pin map against `../../Tumbler_new_PCB/`.
 2. Validate SPI chip-select, reset, wakeup, and IRQ behavior in `platform/port.c`.
 3. Read the DW3xxx device ID through the Qorvo driver.
-4. Send and receive a raw UWB frame.
-5. Port the old tag/anchor protocol from `../../old_uwb_reference_repo/embedded_uwb/`.
-6. Calibrate antenna delays and timing on the new PCB.
+4. Replace the placeholder delay/test loop and pass explicit message lengths through the communication helpers.
+5. Send and receive a raw UWB frame.
+6. Port the old tag/anchor protocol from `../../old_uwb_reference_repo/embedded_uwb/`.
+7. Calibrate antenna delays and timing on the new PCB.
 
 This keeps the migration clean: protocol logic is reused, but the hardware driver and board layer are native to the new DWM3000/STM32L431 platform.

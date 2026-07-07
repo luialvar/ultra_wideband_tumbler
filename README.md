@@ -1,6 +1,6 @@
-# UWB Hardware and Firmware Migration
+# Tumbler UWB Subsystem Workspace
 
-This repository organizes the hardware, power-analysis, embedded-driver, and firmware assets used to migrate an academic UWB localization node from the older SKITH/DWM1000 platform to a newer STM32L4/DWM3000 PCB.
+This repository organizes the hardware, mechanical-design, power-analysis, embedded-driver, and firmware material for the Tumbler UWB node in the AMADEE-27 university robotics project. The software migration from the older SKITH/DWM1000 platform to a newer STM32L4/DWM3000 PCB is a central part of the work, but it is not the whole project: the repository also captures the PCB, mechanical-integration, power-budget, and bring-up context needed to make the Tumbler subsystem usable.
 
 The project is intentionally split by layer. The legacy folders are kept as engineering references, while the new CubeMX firmware and the Tumbler PCB are the active migration target.
 
@@ -10,12 +10,24 @@ This work was developed in the context of a university robotics project preparin
 
 AMADEE-27 is designed to emulate selected aspects of a human-robotic Mars mission. The mission concept combines analog astronauts, robotic systems, field experiments, and a Mission Support Center in Austria to recreate operational constraints similar to planetary exploration. The official AMADEE-27 call focuses on areas such as engineering and robotics, planetary surface operations, geoscience, life sciences, and human factors.
 
-Within that broader university project, my responsibility was the Tumbler UWB subsystem: understanding the old UWB localization stack, migrating the hardware/firmware concept from DWM1000 to DWM3000, documenting the PCB and power-budget context, and preparing the new STM32CubeMX/HAL firmware structure for the upgraded PCB.
+Within that broader university project, my responsibility was the Tumbler UWB subsystem rather than only a code port. That included understanding the old UWB localization stack, contributing to mechanical design and integration ideas, helping around the new PCB by studying the schematic/layout and matching it to firmware pin names, learning the practical hardware constraints, documenting the PCB and power-budget context, and preparing the new STM32CubeMX/HAL firmware structure for the upgraded PCB.
 
 External context:
 
 - Austrian Space Forum AMADEE-27 overview: https://oewf.org/en/amadee-27/
 - AMADEE-27 Announcement of Opportunity: https://oewf.org/en/2025/12/amadee-27-ao/
+
+## Tumbler Subsystem Scope
+
+The important object in this repository is the Tumbler UWB subsystem as an integrated robot component. In practice, that means the work spans several connected areas:
+
+- mechanical design exploration for fitting the electronics into the Tumbler concept,
+- support and learning around the new PCB design, including how schematic/layout choices become firmware pin definitions,
+- power-budget tracking for tag and anchor operating assumptions,
+- low-level STM32L4/DWM3000 bring-up,
+- migration of the old UWB ranging ideas onto a new CubeMX/HAL and Qorvo DW3xxx base.
+
+The firmware migration is therefore one part of a larger embedded-system integration effort.
 
 ## Migration Summary
 
@@ -36,6 +48,7 @@ External context:
 | `power_calculations/` | Spreadsheet-based power budgets. The files are grouped around the old and new PCB assumptions, including anchor/tag operating modes. |
 | `old_uwb_reference_repo/` | Legacy university toolkit component used as a software reference. It contains the old embedded DWM1000 firmware plus robot-side ROS localization code. |
 | `software_new_pcb/` | New STM32CubeMX/HAL firmware for the new PCB. This is the active new-board software area. |
+| `tumbler_images/` | Mechanical concept images and visual material for the Tumbler integration work. |
 | `useful_links.txt` | Extra project links and references collected during development. |
 
 ## What Is Reused
@@ -61,6 +74,8 @@ The practical bring-up path is:
 
 This repository demonstrates a full embedded migration across hardware, firmware, and tooling boundaries:
 
+- connecting mechanical integration constraints with the electronics layout,
+- helping translate the new PCB design into a firmware-facing pin map,
 - translating real PCB wiring into CubeMX/HAL pin definitions,
 - replacing a legacy DWM1000 driver stack with the Qorvo DW3xxx driver,
 - separating reusable ranging logic from non-reusable board/framework code,
